@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASH: Prevenção e Conscientização</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .dialog {
+            transition: all 0.3s ease-in-out;
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center py-10">
+
+    <div id="main-container" class="container mx-auto p-6 bg-white rounded-xl shadow-lg md:p-10">
+
+        <!-- Diálogo de Mensagem (substitui alert()) -->
+        <div id="message-dialog" class="dialog fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full mx-4 text-center">
+                <h3 id="dialog-title" class="text-xl font-bold mb-4 text-gray-800"></h3>
+                <p id="dialog-message" class="text-gray-600 mb-6"></p>
+                <button id="dialog-close-btn" class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">Fechar</button>
+            </div>
+        </div>
+
+        <!-- Spinner de Carregamento -->
+        <div id="loading-spinner" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="flex flex-col items-center">
+                <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-4 text-white text-lg">Analisando seus exames...</p>
+            </div>
+        </div>
+        
+        <!-- Etapa 1: Seleção de Público -->
+        <section id="audience-selection" class="text-center transition-opacity duration-500">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">Descubra o que é MASH.</h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-8">E por que isso importa para a sua saúde.</p>
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <button data-role="patient" class="audience-btn px-8 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors">Sou Paciente</button>
+                <button data-role="doctor" class="audience-btn px-8 py-4 bg-emerald-600 text-white font-bold rounded-lg shadow-md hover:bg-emerald-700 transition-colors">Sou Médico</button>
+                <button data-role="agent" class="audience-btn px-8 py-4 bg-fuchsia-600 text-white font-bold rounded-lg shadow-md hover:bg-fuchsia-700 transition-colors">Sou Agente de Saúde</button>
+            </div>
+        </section>
+
+        <!-- Etapa 2: Seção do Paciente -->
+        <section id="patient-section" class="hidden transition-opacity duration-500">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Você tem gordura no fígado?</h2>
+            <p class="text-gray-600 mb-6 text-center">Responda a algumas perguntas para entender seu risco.</p>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                <div class="mb-6">
+                    <p class="text-lg font-medium text-gray-700 mb-2">1. Você já foi diagnosticado com gordura no fígado?</p>
+                    <div class="flex items-center space-x-4">
+                        <button data-answer="yes" class="question-btn px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors text-gray-700 font-medium">Sim</button>
+                        <button data-answer="no" class="question-btn px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors text-gray-700 font-medium">Não</button>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-lg font-medium text-gray-700 mb-2">2. Você sabe o que é MASH (esteato-hepatite associada à disfunção metabólica)?</p>
+                    <div class="flex items-center space-x-4">
+                        <button data-answer="yes" class="question-btn px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors text-gray-700 font-medium">Sim</button>
+                        <button data-answer="no" class="question-btn px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors text-gray-700 font-medium">Não, o que é?</button>
+                    </div>
+                </div>
+
+                <div id="mash-explanation" class="hidden mt-4 p-4 bg-blue-100 rounded-lg">
+                    <p class="text-blue-800">MASH é uma doença hepática progressiva. É uma inflamação do fígado causada pelo acúmulo de gordura, que pode levar à cirrose e, em casos raros, a câncer de fígado. Está fortemente ligada à obesidade, diabetes tipo 2 e colesterol alto. A detecção precoce é crucial!</p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <label for="exam-file-patient" class="block text-gray-700 text-lg font-bold mb-2">Faça o upload dos seus exames</label>
+                <input type="file" id="exam-file-patient" class="hidden">
+                <button id="upload-btn-patient" class="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">Upload de Exames</button>
+                <p class="text-sm text-gray-500 mt-2">Arquivos aceitos: PDF, JPG, PNG.</p>
+            </div>
+        </section>
+
+        <!-- Etapa 3: Seção do Médico -->
+        <section id="doctor-section" class="hidden transition-opacity duration-500">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">A MASH está no radar da sua prática clínica?</h2>
+            <p class="text-gray-600 mb-6 text-center">Responda a uma pergunta para acessar recursos.</p>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                <div class="mb-6">
+                    <p class="text-lg font-medium text-gray-700 mb-2">Você costuma investigar MASH em pacientes que apresentam gordura no fígado, colesterol alto ou sintomas de síndrome metabólica?</p>
+                    <div class="flex items-center space-x-4">
+                        <button data-answer="yes" class="question-btn px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors text-gray-700 font-medium">Sim, sempre</button>
+                        <button data-answer="sometimes" class="question-btn px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors text-gray-700 font-medium">Às vezes</button>
+                        <button data-answer="no" class="question-btn px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors text-gray-700 font-medium">Não, geralmente não</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <label for="exam-file-doctor" class="block text-gray-700 text-lg font-bold mb-2">Envie os exames dos seus pacientes para análise detalhada</label>
+                <input type="file" id="exam-file-doctor" class="hidden">
+                <button id="upload-btn-doctor" class="px-8 py-4 bg-emerald-600 text-white font-bold rounded-lg shadow-md hover:bg-emerald-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">Upload de Exames</button>
+                <p class="text-sm text-gray-500 mt-2">Arquivos aceitos: PDF, JPG, PNG.</p>
+            </div>
+        </section>
+
+        <!-- Etapa 4: Seção do Agente de Saúde -->
+        <section id="agent-section" class="hidden transition-opacity duration-500">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Multiplique o impacto da sua campanha de saúde.</h2>
+            <p class="text-gray-600 mb-6 text-center">Você é a ponte entre a informação e a comunidade. Utilize nossa ferramenta de upload para fazer a triagem e direcionar pacientes de alto risco, facilitando o acesso ao diagnóstico e tratamento.</p>
+
+            <div class="mt-8 text-center">
+                <label for="exam-file-agent" class="block text-gray-700 text-lg font-bold mb-2">Comece a triagem agora</label>
+                <input type="file" id="exam-file-agent" class="hidden">
+                <button id="upload-btn-agent" class="px-8 py-4 bg-fuchsia-600 text-white font-bold rounded-lg shadow-md hover:bg-fuchsia-700 transition-colors">Upload de Exames</button>
+                <p class="text-sm text-gray-500 mt-2">Arquivos aceitos: PDF, JPG, PNG.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Mapeamento de seções e botões
+        const sections = {
+            patient: document.getElementById('patient-section'),
+            doctor: document.getElementById('doctor-section'),
+            agent: document.getElementById('agent-section'),
+        };
+        const audienceSelection = document.getElementById('audience-selection');
+        const dialog = document.getElementById('message-dialog');
+        const dialogTitle = document.getElementById('dialog-title');
+        const dialogMessage = document.getElementById('dialog-message');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        // Função para exibir o diálogo de mensagem
+        function showDialog(title, message) {
+            dialogTitle.textContent = title;
+            dialogMessage.textContent = message;
+            dialog.classList.remove('hidden');
+        }
+
+        // Função para esconder o diálogo de mensagem
+        function hideDialog() {
+            dialog.classList.add('hidden');
+        }
+
+        // Event listener para fechar o diálogo
+        document.getElementById('dialog-close-btn').addEventListener('click', hideDialog);
+
+        // Event listeners para a seleção do público
+        document.querySelectorAll('.audience-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const role = button.getAttribute('data-role');
+                audienceSelection.classList.add('hidden');
+                sections[role].classList.remove('hidden');
+            });
+        });
+
+        // Lógica de ativação dos botões para Paciente
+        const patientQuestions = document.querySelectorAll('#patient-section .question-btn');
+        const patientUploadBtn = document.getElementById('upload-btn-patient');
+        const patientExplanation = document.getElementById('mash-explanation');
+        let patientAnswers = { 'question1': null, 'question2': null };
+
+        patientQuestions.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const parentDiv = e.target.closest('div');
+                const questionIndex = parentDiv.querySelector('p').textContent.startsWith('1.') ? 'question1' : 'question2';
+                patientAnswers[questionIndex] = e.target.getAttribute('data-answer');
+
+                // Remova a seleção de outros botões na mesma pergunta
+                parentDiv.querySelectorAll('.question-btn').forEach(btn => {
+                    btn.classList.remove('bg-gray-200');
+                });
+                e.target.classList.add('bg-gray-200');
+
+                // Lógica para a explicação de MASH
+                if (questionIndex === 'question2' && patientAnswers.question2 === 'no') {
+                    patientExplanation.classList.remove('hidden');
+                } else if (questionIndex === 'question2') {
+                    patientExplanation.classList.add('hidden');
+                }
+
+                // Habilita o botão de upload se ambas as perguntas foram respondidas
+                if (patientAnswers.question1 && patientAnswers.question2) {
+                    patientUploadBtn.disabled = false;
+                }
+            });
+        });
+        patientUploadBtn.disabled = true; // Desabilita inicialmente
+
+        // Lógica de ativação dos botões para Médico
+        const doctorQuestions = document.querySelectorAll('#doctor-section .question-btn');
+        const doctorUploadBtn = document.getElementById('upload-btn-doctor');
+        let doctorAnswered = false;
+
+        doctorQuestions.forEach(button => {
+            button.addEventListener('click', (e) => {
+                doctorQuestions.forEach(btn => btn.classList.remove('bg-gray-200'));
+                e.target.classList.add('bg-gray-200');
+                doctorAnswered = true;
+                doctorUploadBtn.disabled = false;
+            });
+        });
+        doctorUploadBtn.disabled = true; // Desabilita inicialmente
+
+        // Função para simular o upload e análise
+        function handleUpload(fileInput, successMessage, errorMessage) {
+            const file = fileInput.files[0];
+            if (!file) {
+                showDialog("Atenção", "Por favor, selecione um arquivo de exame para fazer o upload.");
+                return;
+            }
+
+            // Exibir o spinner de carregamento
+            loadingSpinner.classList.remove('hidden');
+
+            // Simulação de chamada para o backend (API com Vector Search)
+            // Na vida real, você faria um 'fetch' para o seu servidor.
+            // Exemplo: fetch('https://seu-servidor.com/api/analyze', { method: 'POST', body: file });
+            setTimeout(() => {
+                loadingSpinner.classList.add('hidden');
+                
+                // Simulação de sucesso ou erro
+                const isSuccess = Math.random() > 0.1; // 90% de chance de sucesso
+                if (isSuccess) {
+                    showDialog("Análise Concluída", successMessage);
+                } else {
+                    showDialog("Erro na Análise", errorMessage);
+                }
+                
+                // Limpa o campo de arquivo para permitir novo upload
+                fileInput.value = '';
+            }, 3000); // Simula 3 segundos de processamento
+        }
+
+        // Lógica dos botões de upload
+        document.getElementById('upload-btn-patient').addEventListener('click', () => {
+            const fileInput = document.getElementById('exam-file-patient');
+            fileInput.click();
+            fileInput.onchange = () => handleUpload(
+                fileInput,
+                "Seus resultados foram analisados. Recomendamos agendar uma consulta com um médico para discutir os achados e receber orientações personalizadas.",
+                "Não foi possível analisar o arquivo. Por favor, tente novamente ou entre em contato com o suporte."
+            );
+        });
+
+        document.getElementById('upload-btn-doctor').addEventListener('click', () => {
+            const fileInput = document.getElementById('exam-file-doctor');
+            fileInput.click();
+            fileInput.onchange = () => handleUpload(
+                fileInput,
+                "A análise de exames do paciente foi enviada para o seu painel de dados. Você receberá um resumo detalhado e sugestões de conduta clínica.",
+                "Não foi possível analisar o arquivo. Por favor, revise o formato ou a qualidade do arquivo e tente novamente."
+            );
+        });
+
+        document.getElementById('upload-btn-agent').addEventListener('click', () => {
+            const fileInput = document.getElementById('exam-file-agent');
+            fileInput.click();
+            fileInput.onchange = () => handleUpload(
+                fileInput,
+                "Análise concluída. Com base nos resultados, o sistema identificou um perfil de alto risco para MASH. Você pode agora direcionar o paciente para acompanhamento médico.",
+                "Houve um problema ao processar o arquivo. Verifique a conexão e tente novamente."
+            );
+        });
+
+    </script>
+</body>
+</html>
